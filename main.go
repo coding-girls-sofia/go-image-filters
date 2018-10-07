@@ -10,14 +10,23 @@ import (
 	_ "image/png"
 )
 
+func loadImage(filePath string) (image.Image, string, error) {
+	imageFile, err := os.Open(filePath)
+	if err != nil {
+		return nil, "", err
+	}
+	imageData, format, err := image.Decode(imageFile)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return imageData, format, nil
+}
+
 func main() {
 	filePath := os.Args[1]
 	fmt.Printf("Attempting to read image from %s\n", filePath)
-	imageFile, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	imageData, format, err := image.Decode(imageFile)
+	imageData, format, err := loadImage(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
