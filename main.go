@@ -9,6 +9,8 @@ import (
 
 	"image/jpeg"
 	"image/png"
+
+	"github.com/coding-girls-sofia/go-image-filters/kernel"
 )
 
 func loadImage(filePath string) (image.Image, string, error) {
@@ -49,6 +51,13 @@ func main() {
 	}
 	fmt.Printf("Read a %s image \n", format)
 	fmt.Printf("The size of the image is %s\n", imageData.Bounds().Size())
+
+	k := kernel.New([][]float32{
+		{0, 0, 0},
+		{0, 1, 0},
+		{0, 0, 0},
+	})
+	fmt.Printf("%#v", k)
 
 	if err := writeImage(imageData, format); err != nil {
 		log.Fatal(err)
