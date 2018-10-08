@@ -57,9 +57,9 @@ func main() {
 		{0, 1, 0},
 		{0, 0, 0},
 	})
-	fmt.Printf("%#v", k)
+	resultImage, _ := k.Apply(imageData)
 
-	if err := writeImage(imageData, format); err != nil {
+	if err := writeImage(resultImage, format); err != nil {
 		log.Fatal(err)
 	}
 
