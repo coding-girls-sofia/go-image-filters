@@ -1,6 +1,7 @@
 package kernel
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 )
@@ -67,10 +68,17 @@ func (k Kernel) Apply(img image.Image) (image.Image, error) {
 	imageBounds := img.Bounds()
 	result := image.NewRGBA(imageBounds)
 
+	pixelsCount := float32(imageBounds.Dx() * imageBounds.Dy())
+	pixelsProcessed := float32(0)
+
 	for x := imageBounds.Min.X; x < imageBounds.Max.X; x++ {
 		for y := imageBounds.Min.Y; y < imageBounds.Max.Y; y++ {
 			neighbourhood := k.getNeighbourhood(x, y, img)
 			result.Set(x, y, k.pixelValueFromNeighbourhood(neighbourhood))
+			pixelsProcessed++
+
+			donePercent := int(pixelsProcessed * 100 / pixelsCount)
+			fmt.Printf("\r%d%% done", donePercent)
 		}
 	}
 
