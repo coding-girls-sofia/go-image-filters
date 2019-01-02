@@ -42,12 +42,20 @@ func writeImage(imageData image.Image, format string) error {
 	}
 }
 
+func fatalError(message string, a ...interface{}) {
+	fmt.Fprintf(os.Stderr, message, a...)
+	os.Exit(1)
+}
+
 func main() {
+	if len(os.Args) < 2 {
+		fatalError("Please provide image file name as first argument")
+	}
 	filePath := os.Args[1]
 	fmt.Printf("Attempting to read image from %s\n", filePath)
 	imageData, format, err := loadImage(filePath)
 	if err != nil {
-		log.Fatal(err)
+		fatalError("could not read file: %s", err)
 	}
 	fmt.Printf("Read a %s image \n", format)
 	fmt.Printf("The size of the image is %s\n", imageData.Bounds().Size())
@@ -60,7 +68,7 @@ func main() {
 	resultImage, _ := k.Apply(imageData)
 
 	if err := writeImage(resultImage, format); err != nil {
-		log.Fatal(err)
+		fatalError("could not write file: %s", err)
 	}
 
 	return
